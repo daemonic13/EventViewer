@@ -1,42 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/event_item_text"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="48dp"
     android:background="@drawable/background"
-    android:orientation="vertical" >
-    
+    android:orientation="vertical"
+    tools:context=".EventMainActivity" >
+
     <TextView
         android:id="@+id/event_item_title"
         style="@style/TitleDisplay"
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:text="Testing"
-        ></TextView>
-    
-    <LinearLayout
-    android:id="@+id/event_item_timing"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal" >
-    
-    <TextView
-        android:id="@+id/event_item_datestart"
-        style="@style/DateDisplay"
-        android:layout_height="wrap_content"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:text="Testing"
-        ></TextView>
-    
-        <TextView
-        android:id="@+id/event_item_dateend"
-        style="@style/DateDisplay"
-        android:layout_height="wrap_content"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:text="Testing"
-        ></TextView>
+        android:layout_height="30dp"
+        android:text="Testing" >
+    </TextView>
 
+    <LinearLayout
+        android:id="@+id/event_item_timing"
+        android:layout_width="match_parent"
+        android:layout_height="18dp"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/event_item_datestart"
+            style="@style/DateDisplay"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Testing" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/event_item_dateend"
+            style="@style/DateDisplay"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Testing" >
+        </TextView>
     </LinearLayout>
+
 </LinearLayout>
