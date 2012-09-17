@@ -3,8 +3,7 @@
     <style name="AppTheme" parent="android:Theme.Holo" >
 		<item name="android:windowTitleSize">46dp</item>
     </style>
-    
-    
+
     
     <style name="DateDisplay" parent="android:Theme.Light" >
         <item name="android:textColor">#000066</item>

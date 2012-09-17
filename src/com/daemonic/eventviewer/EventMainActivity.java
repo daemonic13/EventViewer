@@ -8,7 +8,6 @@ import android.provider.CalendarContract.Events;
 import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Intent;
-import android.database.Cursor;
 import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,12 +25,24 @@ public class EventMainActivity extends Activity {
     	super.onCreate(savedInstanceState);
     	setContentView(R.layout.event_main);
         
-        // Find our insertion point
+    	// Setup our View!
+    	UpdateView();
+       
+    }
+    
+    private void UpdateView() {
+    	
+    	 // Find our insertion point
         ViewGroup insertPoint = (ViewGroup) findViewById(R.id.mainview);
         
         // Get our calendar manager, query database
         mCal = new CalendarManager(this);
-        mCal.RefreshCursor();
+        int cnt = mCal.RefreshCursor();
+        
+        // Set up app title to show total number of items
+        //String appTitle = getString(R.string.app_name);
+        //appTitle += " ("+Long.toString(cnt) +")";
+        //this.setTitle(appTitle);
         
         String title = "";
         long start = 0;
@@ -42,8 +53,12 @@ public class EventMainActivity extends Activity {
         
         int i = 0;
         while (i < 40) {
+        	
+        	// make sure we don't go too far
         	if (mCal.mCursor.isAfterLast()) { break; }
         	mCal.mCursor.moveToNext();
+        	
+        	// progress through our cursor
         	i++;
         	try {
             	title = mCal.mCursor.getString(0);
@@ -54,7 +69,7 @@ public class EventMainActivity extends Activity {
             	//ignore
             }
         	
-        	// Setup TextView
+        	// Setup TextViews for start, end, title
         	TextView q = null;
         	View tv = getLayoutInflater().inflate(R.layout.event_item, null);
             q = (TextView) tv.findViewById(R.id.event_item_datestart);
@@ -74,8 +89,12 @@ public class EventMainActivity extends Activity {
 	            }
 	        });           
             
+            // Attach to display
             insertPoint.addView(tv);
         }
+        
+        // Clear our memory
+        mCal.UnhookCursor();
     }
 
     @Override
@@ -89,6 +108,11 @@ public class EventMainActivity extends Activity {
         switch (item.getItemId()) {
             case R.id.refresh:
                 return true;
+            case R.id.filter:
+            	 // app icon in action bar clicked; go home
+                Intent intent = new Intent().setClass(this, SettingsActivity.class);
+                startActivity(intent);
+            	return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

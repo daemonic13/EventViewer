@@ -40,19 +40,32 @@ public class CalendarManager {
 		iCalendarIDs.addAll(vCalendarIDs);
 		
 		// re-set internal cursor
+		if (mCursor != null) UnhookCursor();
+		RefreshCursor();
 		
 	}
 	
-	public void RefreshCursor() {
+	public int RefreshCursor() {
 		
         Date d = new Date();
         long startQ = d.getTime();
         String startQS = Long.toString(startQ);
         
         // Query our Events Calendar
+        // Select everything that starts now or later
+        //    and everything that ends now or later
+        // this will catch events in progress and not remove them until they are complete
         mCursor = mContext.getContentResolver().query(Events.CONTENT_URI, ECOLS, 
-        			"DTSTART >= ?",new String[] { startQS }, "DTSTART");
+        			"DTSTART >= ? OR DTEND >= ?",new String[] { startQS, startQS }, "DTSTART");
         mCursor.moveToFirst();
+        
+        return mCursor.getCount();
+	}
+	
+	public void UnhookCursor() {
+		// Clean up cursor, unhook from database, clear memory
+		mCursor.close();
+		mCursor = null;
 	}
 	
 }

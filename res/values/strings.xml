@@ -5,5 +5,15 @@
     <string name="menu_settings">Settings</string>
     <string name="title_activity_event_main">EventViewer</string>
     <string name="refresh">Refresh</string>
-	<string name="filter">Filter</string>
+    <string name="filter">Filter</string>
+    
+    
+    <!--  Settings  -->
+    <string name="title_activity_settings">Settings</string>
+    <string name="items_to_display">Display</string>
+    <string name="items_to_display_summary">Number of items to display.</string>
+    <string name="cal_display">Calendars to Display</string>
+    <string name="cal_display_summary">The list of calendars to display.</string>
+    <string name="items_to_display_dialog_title">Items to Display</string>
+
 </resources>
