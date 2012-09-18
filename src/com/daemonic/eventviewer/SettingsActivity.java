@@ -8,6 +8,8 @@ import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
 
 public class SettingsActivity extends Activity {
+	
+	public static final String KEY_ITEMS_TO_DISPLAY = "items_to_display";  
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -15,8 +17,8 @@ public class SettingsActivity extends Activity {
         setContentView(R.layout.activity_settings);
         
         // Display the fragment as the main content.
-        getFragmentManager().beginTransaction()
-                .replace(android.R.id.content, new SettingsFragment())
+        getFragmentManager().beginTransaction() 
+                .replace(R.id.settingsview, new SettingsFragment())
                 .commit();
         
         getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -32,7 +34,7 @@ public class SettingsActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
+                finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);

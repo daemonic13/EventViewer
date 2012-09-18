@@ -17,19 +17,20 @@ public final class R {
         public static final int ic_launcher=0x7f020003;
     }
     public static final class id {
-        public static final int editText1=0x7f080009;
-        public static final int event_item_dateend=0x7f080004;
-        public static final int event_item_datestart=0x7f080003;
-        public static final int event_item_text=0x7f080000;
-        public static final int event_item_timing=0x7f080002;
-        public static final int event_item_title=0x7f080001;
-        public static final int filter=0x7f08000c;
-        public static final int items_desc=0x7f080008;
-        public static final int items_title=0x7f080007;
-        public static final int mainview=0x7f080006;
-        public static final int mainviewscroll=0x7f080005;
-        public static final int menu_settings=0x7f08000a;
-        public static final int refresh=0x7f08000b;
+        public static final int editText1=0x7f08000a;
+        public static final int event_item_dateend=0x7f080005;
+        public static final int event_item_datestart=0x7f080004;
+        public static final int event_item_text=0x7f080001;
+        public static final int event_item_timing=0x7f080003;
+        public static final int event_item_title=0x7f080002;
+        public static final int filter=0x7f08000d;
+        public static final int items_desc=0x7f080009;
+        public static final int items_title=0x7f080008;
+        public static final int mainview=0x7f080007;
+        public static final int mainviewscroll=0x7f080006;
+        public static final int menu_settings=0x7f08000b;
+        public static final int refresh=0x7f08000c;
+        public static final int settingsview=0x7f080000;
     }
     public static final class layout {
         public static final int activity_settings=0x7f030000;

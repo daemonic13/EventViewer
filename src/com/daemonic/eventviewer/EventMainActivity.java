@@ -4,10 +4,15 @@ import java.text.Format;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.provider.CalendarContract.Events;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ContentUris;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,19 +23,24 @@ import android.widget.TextView;
 public class EventMainActivity extends Activity {
 	
     private CalendarManager mCal;
+    private static final int REQUEST_CODE_PREFERENCES = 1;
+    private int mintMaxItems = 40;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	
     	super.onCreate(savedInstanceState);
     	setContentView(R.layout.event_main);
+    	
+    	// Update our preferences
+    	updatePreferences();
         
     	// Setup our View!
-    	UpdateView();
+    	updateView();
        
     }
     
-    private void UpdateView() {
+    private void updateView() {
     	
     	 // Find our insertion point
         ViewGroup insertPoint = (ViewGroup) findViewById(R.id.mainview);
@@ -40,9 +50,9 @@ public class EventMainActivity extends Activity {
         int cnt = mCal.RefreshCursor();
         
         // Set up app title to show total number of items
-        //String appTitle = getString(R.string.app_name);
-        //appTitle += " ("+Long.toString(cnt) +")";
-        //this.setTitle(appTitle);
+        String appTitle = getString(R.string.app_name);
+        appTitle += " ("+Long.toString(cnt) +")";
+        this.setTitle(appTitle);
         
         String title = "";
         long start = 0;
@@ -52,7 +62,7 @@ public class EventMainActivity extends Activity {
         Format tf = DateFormat.getTimeFormat(this);
         
         int i = 0;
-        while (i < 40) {
+        while (i < mintMaxItems) {
         	
         	// make sure we don't go too far
         	if (mCal.mCursor.isAfterLast()) { break; }
@@ -107,14 +117,45 @@ public class EventMainActivity extends Activity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.refresh:
+            	updateView();
                 return true;
             case R.id.filter:
             	 // app icon in action bar clicked; go home
                 Intent intent = new Intent().setClass(this, SettingsActivity.class);
-                startActivity(intent);
+                // Make it a subactivity so we know when it returns
+                startActivityForResult(intent, REQUEST_CODE_PREFERENCES);
             	return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // The preferences returned if the request code is what we had given
+        // earlier in startSubActivity
+        if (requestCode == REQUEST_CODE_PREFERENCES) {
+            // Read a sample value they have set
+        	updatePreferences();
+        	updateView();
+        }
+    }
+
+    private void updatePreferences() {
+        // Since we're in the same package, we can use this context to get
+        // the default shared preferences
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        try {
+        	String t = sharedPref.getString(SettingsActivity.KEY_ITEMS_TO_DISPLAY, "40");
+        	mintMaxItems = (int) Long.parseLong(t.trim());
+    	} catch (Exception e) {
+    		AlertDialog alertDialog;
+    		alertDialog = new AlertDialog.Builder(this).create();
+    		alertDialog.setTitle("Error");
+    		alertDialog.setMessage(e.getMessage());
+    		alertDialog.show();
         }
     }
 }
