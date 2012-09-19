@@ -1,6 +1,7 @@
 package com.daemonic.eventviewer;
 
 import android.os.Bundle;
+import android.preference.MultiSelectListPreference;
 import android.preference.PreferenceFragment;
 import android.app.Activity;
 import android.view.Menu;
@@ -10,7 +11,9 @@ import android.support.v4.app.NavUtils;
 public class SettingsActivity extends Activity {
 	
 	public static final String KEY_ITEMS_TO_DISPLAY = "items_to_display";  
+	public static final String KEY_CALS_TO_DISPLAY = "cal_display";  
 
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +51,15 @@ public class SettingsActivity extends Activity {
 
             // Load the preferences from an XML resource
             addPreferencesFromResource(R.xml.settings);
+            
+            // Get our calendar manager
+            //CalendarManager cm = new CalendarManager(getActivity().getApplicationContext());
+            
+            MultiSelectListPreference mPref = (MultiSelectListPreference) this.findPreference(SettingsActivity.KEY_CALS_TO_DISPLAY);
+            String[] cals = new String[] { "All", "Google" };
+            String[] ids = new String[] { "1", "2" };
+            mPref.setEntries(cals);
+            mPref.setEntryValues(ids);
         }
     	    
     }

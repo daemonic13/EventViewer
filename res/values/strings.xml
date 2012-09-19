@@ -15,5 +15,12 @@
     <string name="cal_display">Calendars to Display</string>
     <string name="cal_display_summary">The list of calendars to display.</string>
     <string name="items_to_display_dialog_title">Items to Display</string>
+    <string-array name="empty_array"/>
+    <string-array name="cal_default_values">
+        	<item>All</item>
+    </string-array>
+    <string-array name="cal_default_entries">
+        	<item>*</item>
+    </string-array>
 
 </resources>

@@ -8,8 +8,12 @@
                 android:dialogTitle="@string/items_to_display_dialog_title"
                 android:defaultValue="40"
                  />
-    <!-- 
-    <MultiSelectListPreference android:title="@string/cal_display" android:summary="@string/cal_display_summary" android:key="cal_display"/>
-    -->
+    <MultiSelectListPreference 
+    	android:title="@string/cal_display" 
+    	android:summary="@string/cal_display_summary" 
+    	android:key="cal_display"
+    	android:entries="@array/cal_default_entries"
+    	android:entryValues="@array/cal_default_values"
+    	android:defaultValue="@array/empty_array" />
 
 </PreferenceScreen>
