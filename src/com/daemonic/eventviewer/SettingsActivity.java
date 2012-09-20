@@ -6,7 +6,7 @@ import android.preference.PreferenceFragment;
 import android.app.Activity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.support.v4.app.NavUtils;
+import android.util.Log;
 
 public class SettingsActivity extends Activity {
 	
@@ -52,15 +52,41 @@ public class SettingsActivity extends Activity {
             // Load the preferences from an XML resource
             addPreferencesFromResource(R.xml.settings);
             
-            // Get our calendar manager
-            //CalendarManager cm = new CalendarManager(getActivity().getApplicationContext());
+            // Get our calendar manager and calendar names/ids
+            CalendarManager cm = new CalendarManager(getActivity().getApplicationContext());
+            Object[] calData = cm.getCalendars();
             
+            // Test for missing data
+            if (calData == null) { return; }
+            
+            String[] calIDs = (String[]) calData[0];
+            String[] calNames = (String[]) calData[1];
+            
+            Log.w("com.daemonic.eventviewer",calIDs[0]);
+            Log.w("com.daemonic.eventviewer",calNames[0]);
+            
+            // Build up our preference list
             MultiSelectListPreference mPref = (MultiSelectListPreference) this.findPreference(SettingsActivity.KEY_CALS_TO_DISPLAY);
-            String[] cals = new String[] { "All", "Google" };
-            String[] ids = new String[] { "1", "2" };
-            mPref.setEntries(cals);
-            mPref.setEntryValues(ids);
+            
+            // need a 1
+            
+            if (calIDs.length > 0) {
+                mPref.setEntries(calNames);
+                mPref.setEntryValues(calIDs);
+            } else {
+            	mPref.setEntries(new String[]{ "All"});
+            	mPref.setEntryValues(new String[]{ "1" });
+            }
+            
         }
+        
+        String[] concat(String[] A, String[] B) {
+        	// utility function to append two arrays of strings
+        	String[] C= new String[A.length+B.length];
+        	System.arraycopy(A, 0, C, 0, A.length);
+    	   	System.arraycopy(B, 0, C, A.length, B.length);
+    	   	return C;
+    	}
     	    
     }
 
