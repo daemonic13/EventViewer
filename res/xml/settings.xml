@@ -10,10 +10,11 @@
                  />
     <MultiSelectListPreference 
     	android:title="@string/cal_display" 
+    	android:dialogTitle="@string/cal_display"
     	android:summary="@string/cal_display_summary" 
-    	android:key="cal_display"
-    	android:entries="@array/cal_default_entries"
-    	android:entryValues="@array/cal_default_values"
+    	android:key="caldisplay"
+    	android:entries="@array/values_array"
+    	android:entryValues="@array/values_array"
     	android:defaultValue="@array/empty_array" />
 
 </PreferenceScreen>

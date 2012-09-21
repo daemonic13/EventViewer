@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.preference.MultiSelectListPreference;
 import android.preference.PreferenceFragment;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.util.Log;
@@ -13,7 +14,7 @@ import android.util.Log;
 public class SettingsActivity extends Activity {
 	
 	public static final String KEY_ITEMS_TO_DISPLAY = "items_to_display";  
-	public static final String KEY_CALS_TO_DISPLAY = "cal_display";  
+	public static final String KEY_CALS_TO_DISPLAY = "caldisplay";  
 
 	
     @Override
@@ -55,37 +56,48 @@ public class SettingsActivity extends Activity {
             // Load the preferences from an XML resource
             addPreferencesFromResource(R.xml.settings);
             
-            // Get our calendar manager and calendar names/IDs
-            CalendarManager cm = new CalendarManager(getActivity().getApplicationContext());
-            Object[] calData = cm.getCalendars();
+            try {
             
-            // Test for missing data
-            if (calData == null) { return; }
+	            // Get our calendar manager and calendar names/IDs
+	            CalendarManager cm = new CalendarManager(getActivity().getApplicationContext());
+	            Object[] calData = cm.getCalendars();
+	            
+	            // Test for missing data
+	            if (calData == null) { return; }
+	            
+	            String[] calIDs = (String[]) calData[0];
+	            String[] calNames = (String[]) calData[1];
+	            
+	            Log.w("com.daemonic.eventviewer",calIDs[0]);
+	            Log.w("com.daemonic.eventviewer",calNames[0]);
             
-            String[] calIDs = (String[]) calData[0];
-            String[] calNames = (String[]) calData[1];
-            
-            Log.w("com.daemonic.eventviewer",calIDs[0]);
-            Log.w("com.daemonic.eventviewer",calNames[0]);
-            
-            // Build up our preference list
-            MultiSelectListPreference mPref = (MultiSelectListPreference) this.findPreference(SettingsActivity.KEY_CALS_TO_DISPLAY);
-            
-            Set<String> mT = mPref.getValues();
-            mPref.setValues(mT);
-            Log.w("com.daemonic.eventviewer","Entries");
-            for (String z : mT) {
-            	Log.w("com.daemonic.eventviewer",z);
+	            // Build up our preference list
+	            MultiSelectListPreference mPref = (MultiSelectListPreference) findPreference(SettingsActivity.KEY_CALS_TO_DISPLAY);
+	            
+	            Set<String> mT = mPref.getValues();
+	            mPref.setValues(mT);
+	            Log.w("com.daemonic.eventviewer","Entries");
+	            for (String z : mT) {
+	            	Log.w("com.daemonic.eventviewer",z);
+	            }
+	            
+	            // Set Entries
+	            if (calIDs.length > 0) {
+	                mPref.setEntries(calNames);
+	                mPref.setEntryValues(calIDs);
+	                mPref.setDefaultValue(calIDs);
+	            } else {
+	            	mPref.setEntries(new String[]{ "All"});
+	            	mPref.setEntryValues(new String[]{ "1" });
+	            }
             }
-            
-            // Set Entries
-            if (calIDs.length > 0) {
-                mPref.setEntries(calNames);
-                mPref.setEntryValues(calIDs);
-            } else {
-            	mPref.setEntries(new String[]{ "All"});
-            	mPref.setEntryValues(new String[]{ "1" });
-            }
+	       catch (Exception e) {
+	    	   	AlertDialog alertDialog;
+	    		alertDialog = new AlertDialog.Builder(getActivity().getApplicationContext()).create();
+	    		alertDialog.setTitle("Error");
+	    		alertDialog.setMessage(e.getMessage());
+	    		alertDialog.show();
+	       }
             
         }
         
