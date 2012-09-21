@@ -1,5 +1,7 @@
 package com.daemonic.eventviewer;
 
+import java.util.Set;
+
 import android.os.Bundle;
 import android.preference.MultiSelectListPreference;
 import android.preference.PreferenceFragment;
@@ -47,12 +49,13 @@ public class SettingsActivity extends Activity {
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
+        	
             super.onCreate(savedInstanceState);
 
             // Load the preferences from an XML resource
             addPreferencesFromResource(R.xml.settings);
             
-            // Get our calendar manager and calendar names/ids
+            // Get our calendar manager and calendar names/IDs
             CalendarManager cm = new CalendarManager(getActivity().getApplicationContext());
             Object[] calData = cm.getCalendars();
             
@@ -68,8 +71,14 @@ public class SettingsActivity extends Activity {
             // Build up our preference list
             MultiSelectListPreference mPref = (MultiSelectListPreference) this.findPreference(SettingsActivity.KEY_CALS_TO_DISPLAY);
             
-            // need a 1
+            Set<String> mT = mPref.getValues();
+            mPref.setValues(mT);
+            Log.w("com.daemonic.eventviewer","Entries");
+            for (String z : mT) {
+            	Log.w("com.daemonic.eventviewer",z);
+            }
             
+            // Set Entries
             if (calIDs.length > 0) {
                 mPref.setEntries(calNames);
                 mPref.setEntryValues(calIDs);
@@ -89,6 +98,5 @@ public class SettingsActivity extends Activity {
     	}
     	    
     }
-
 
 }
