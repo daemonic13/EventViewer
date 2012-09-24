@@ -1,6 +1,8 @@
 package com.daemonic.eventviewer;
 
 import java.text.Format;
+import java.util.Set;
+import java.util.Vector;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -42,6 +44,7 @@ public class EventMainActivity extends Activity {
     	
     	 // Find our insertion point
         ViewGroup insertPoint = (ViewGroup) findViewById(R.id.mainview);
+        insertPoint.removeAllViews();
         
         // Get our calendar manager, query database
         mCal = new CalendarManager(this);
@@ -148,6 +151,14 @@ public class EventMainActivity extends Activity {
         try {
         	String t = sharedPref.getString(SettingsActivity.KEY_ITEMS_TO_DISPLAY, "40");
         	mintMaxItems = (int) Long.parseLong(t.trim());
+        	
+        	Set<String> sValues = sharedPref.getStringSet(SettingsActivity.KEY_CALS_TO_DISPLAY, null);
+        	
+        	// Convert to integers
+        	Vector<String> vValues = new Vector<String>();
+        	vValues.addAll(sValues);
+        	mCal.filterCalendars(vValues);
+        	
     	} catch (Exception e) {
     		AlertDialog alertDialog;
     		alertDialog = new AlertDialog.Builder(this).create();

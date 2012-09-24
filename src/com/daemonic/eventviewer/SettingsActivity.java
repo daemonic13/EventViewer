@@ -85,7 +85,7 @@ public class SettingsActivity extends Activity {
 	            if (calIDs.length > 0) {
 	                mPref.setEntries(calNames);
 	                mPref.setEntryValues(calIDs);
-	                mPref.setDefaultValue(calIDs);
+	                mPref.setDefaultValue(new String[0]);
 	            } else {
 	            	mPref.setEntries(new String[]{ "All"});
 	            	mPref.setEntryValues(new String[]{ "1" });

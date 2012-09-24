@@ -11,7 +11,7 @@ import android.util.Log;
 
 public class CalendarManager {
 	
-	private Vector<Long> iCalendarIDs = new Vector<Long>();
+	private Vector<String> sCalendarIDs = new Vector<String>();
 	public Cursor mCursor = null;
 	private Context mContext = null;
 	
@@ -37,8 +37,6 @@ public class CalendarManager {
 	
 	public Object[] getCalendars() {
 		
-		String[] calIDs = null;
-		String[] calNames = null;
 		Cursor calsCursor = null;
 		
 		// Retrieve Calendars
@@ -54,8 +52,8 @@ public class CalendarManager {
 		// Move to first item
 		calsCursor.moveToFirst();
 		
-		calIDs = new String[cLen];
-		calNames = new String[cLen];
+		Vector<String> calIDs = new Vector<String>();
+		Vector<String> calNames = new Vector<String>();
 		
 		// Push through our calendar entries, building the strings
 		for (int i = 0; i < cLen; i++) {
@@ -70,24 +68,28 @@ public class CalendarManager {
 			if (name == null) {
 				name = "My Calendar";
 			}
+			if (id == null) {
+				id = "0";
+			}
 			Log.w("com.daemonic.eventviewer",name);
 			Log.w("com.daemonic.eventviewer",id);
 			
 			// Assign to our array
-			calIDs[i] = id;
-			calNames[i] = name;
+			calIDs.add(id);
+			calNames.add(name);
 		}
 		
 		// Clean up the cursor
 		calsCursor.close();
 		
-		return new Object[] {calIDs, calNames};
+		// Convert to arrays on the way out
+		return new Object[] {calIDs.toArray(), calNames.toArray()};
 	}
 	
-	public void filterCalendars(Vector<Long> vCalendarIDs) {
+	public void filterCalendars(Vector<String> vCalendarIDs) {
 		// get a list of calendar IDs
-		iCalendarIDs.clear();
-		iCalendarIDs.addAll(vCalendarIDs);
+		sCalendarIDs.clear();
+		sCalendarIDs.addAll(vCalendarIDs);
 		
 		// re-set internal cursor
 		if (mCursor != null) UnhookCursor();
@@ -100,13 +102,40 @@ public class CalendarManager {
         Date d = new Date();
         long startQ = d.getTime();
         String startQS = Long.toString(startQ);
+        Vector<String> sQueryValues = new Vector<String>();
+        
+        // Add our first two filter entries
+        sQueryValues.add(startQS);
+        sQueryValues.add(startQS);
+        
+        // Setup the filters
+        String filterString = "(DTSTART >=? OR DTEND <= ?)";
+        if (sCalendarIDs.size() == 0) {
+        } else {
+        	int i = 0;
+        	filterString += " AND (";
+        	for (String sCalID : sCalendarIDs) {
+        		i++;
+        		if (i > 1) {
+        			filterString += " OR ";
+        		}
+        		filterString += Events.CALENDAR_ID + " = ? ";
+        		sQueryValues.add(sCalID);
+        	}
+        	filterString += ")";
+        }
+        
+        Log.w("com.daemonic.eventviewer",filterString);
+        String[] sQueryVals = new String[sQueryValues.size()];
+        sQueryValues.toArray(sQueryVals);
+        Log.w("com.daemonic.eventviewer",Long.toString(sQueryVals.length));
         
         // Query our Events Calendar
         // Select everything that starts now or later
         //    and everything that ends now or later
         // this will catch events in progress and not remove them until they are complete
         mCursor = mContext.getContentResolver().query(Events.CONTENT_URI, ECOLS, 
-        			"DTSTART >= ? OR DTEND >= ?",new String[] { startQS, startQS }, "DTSTART, DTEND");
+        			filterString, sQueryVals, "DTSTART, DTEND");
         mCursor.moveToFirst();
         
         return mCursor.getCount();
