@@ -22,7 +22,8 @@ import android.widget.TextView;
 
 public class EventMainActivity extends Activity {
 	
-    private CalendarManager mCal;
+	public static final String LOG_NAME = "com.daemonic.eventviewer"; 
+    private EventReader mCal;
     private static final int REQUEST_CODE_PREFERENCES = 1;
     private int mintMaxItems = 40;
 
@@ -31,6 +32,9 @@ public class EventMainActivity extends Activity {
     	
     	super.onCreate(savedInstanceState);
     	setContentView(R.layout.event_main);
+    	
+    	// Create our calendar manager
+    	mCal = new EventReader(this);
     	
     	// Update our preferences
     	updatePreferences();
@@ -47,7 +51,6 @@ public class EventMainActivity extends Activity {
         insertPoint.removeAllViews();
         
         // Get our calendar manager, query database
-        mCal = new CalendarManager(this);
         int cnt = mCal.RefreshCursor();
         
         // Set up app title to show total number of items

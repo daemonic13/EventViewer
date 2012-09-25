@@ -1,12 +1,10 @@
 package com.daemonic.eventviewer;
 
 import java.util.Set;
-
 import android.os.Bundle;
 import android.preference.MultiSelectListPreference;
 import android.preference.PreferenceFragment;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.util.Log;
@@ -47,7 +45,7 @@ public class SettingsActivity extends Activity {
     }
     
     public static class SettingsFragment extends PreferenceFragment {
-
+    	
         @Override
         public void onCreate(Bundle savedInstanceState) {
         	
@@ -60,25 +58,28 @@ public class SettingsActivity extends Activity {
             
 	            // Get our calendar manager and calendar names/IDs
 	            CalendarManager cm = new CalendarManager(getActivity().getApplicationContext());
-	            Object[] calData = cm.getCalendars();
+	            int calCnt = cm.getCalendars();
 	            
 	            // Test for missing data
-	            if (calData == null) { return; }
+	            if (calCnt == 0) { return; }
 	            
-	            String[] calIDs = (String[]) calData[0];
-	            String[] calNames = (String[]) calData[1];
+	            // Get data
+	            String[] calIDs = new String[calCnt];
+	            cm.getCalendarIDs().toArray(calIDs);
+	            String[] calNames = new String[calCnt];
+	            cm.getCalendarNames().toArray(calNames);
 	            
-	            Log.w("com.daemonic.eventviewer",calIDs[0]);
-	            Log.w("com.daemonic.eventviewer",calNames[0]);
+	            Log.w(EventMainActivity.LOG_NAME,calIDs[0]);
+	            Log.w(EventMainActivity.LOG_NAME,calNames[0]);
             
 	            // Build up our preference list
 	            MultiSelectListPreference mPref = (MultiSelectListPreference) findPreference(SettingsActivity.KEY_CALS_TO_DISPLAY);
 	            
 	            Set<String> mT = mPref.getValues();
 	            mPref.setValues(mT);
-	            Log.w("com.daemonic.eventviewer","Entries");
+	            Log.w(EventMainActivity.LOG_NAME,"Entries");
 	            for (String z : mT) {
-	            	Log.w("com.daemonic.eventviewer",z);
+	            	Log.w(EventMainActivity.LOG_NAME,z);
 	            }
 	            
 	            // Set Entries
@@ -92,22 +93,10 @@ public class SettingsActivity extends Activity {
 	            }
             }
 	       catch (Exception e) {
-	    	   	AlertDialog alertDialog;
-	    		alertDialog = new AlertDialog.Builder(getActivity().getApplicationContext()).create();
-	    		alertDialog.setTitle("Error");
-	    		alertDialog.setMessage(e.getMessage());
-	    		alertDialog.show();
+	    	   	Log.e(EventMainActivity.LOG_NAME,"Settings Crash == " + e.getMessage());
 	       }
             
         }
-        
-        String[] concat(String[] A, String[] B) {
-        	// utility function to append two arrays of strings
-        	String[] C= new String[A.length+B.length];
-        	System.arraycopy(A, 0, C, 0, A.length);
-    	   	System.arraycopy(B, 0, C, A.length, B.length);
-    	   	return C;
-    	}
     	    
     }
 

@@ -1,29 +1,18 @@
 package com.daemonic.eventviewer;
 
-import java.util.Date;
 import java.util.Vector;
-
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.CalendarContract.Calendars;
-import android.provider.CalendarContract.Events;
 import android.util.Log;
 
 public class CalendarManager {
 	
 	private Vector<String> sCalendarIDs = new Vector<String>();
+	private Vector<String> sCalendarNames = new Vector<String>();
 	public Cursor mCursor = null;
 	private Context mContext = null;
-	
-	// Event Calendar Strings
-	private static final String[] ECOLS = 
-			new String[] { 
-				Events.TITLE, 
-				Events.DTSTART, 
-				Events.DTEND, 
-				Events._ID
-			};
-	
+
 	// Calendar Strings
 	private static final String[] CCOLS = 
 			new String[] {
@@ -35,7 +24,7 @@ public class CalendarManager {
 		mContext = iContext;
 	}
 	
-	public Object[] getCalendars() {
+	public int getCalendars() {
 		
 		Cursor calsCursor = null;
 		
@@ -46,14 +35,13 @@ public class CalendarManager {
 	
 		// Determine our count
 		int cLen = calsCursor.getCount();		
-		if (cLen == 0) { return null; }
-		Log.w("com.daemonic.eventviewer",Long.toString(cLen));
+		if (cLen == 0) { return 0; }
+		Log.w(EventMainActivity.LOG_NAME,Long.toString(cLen));
 		
 		// Move to first item
 		calsCursor.moveToFirst();
-		
-		Vector<String> calIDs = new Vector<String>();
-		Vector<String> calNames = new Vector<String>();
+		sCalendarIDs.clear();
+		sCalendarNames.clear();
 		
 		// Push through our calendar entries, building the strings
 		for (int i = 0; i < cLen; i++) {
@@ -71,80 +59,27 @@ public class CalendarManager {
 			if (id == null) {
 				id = "0";
 			}
-			Log.w("com.daemonic.eventviewer",name);
-			Log.w("com.daemonic.eventviewer",id);
+			Log.w(EventMainActivity.LOG_NAME,name);
+			Log.w(EventMainActivity.LOG_NAME,id);
 			
 			// Assign to our array
-			calIDs.add(id);
-			calNames.add(name);
+			sCalendarIDs.add(id);
+			sCalendarNames.add(name);
 		}
 		
 		// Clean up the cursor
 		calsCursor.close();
 		
 		// Convert to arrays on the way out
-		return new Object[] {calIDs.toArray(), calNames.toArray()};
+		return sCalendarIDs.size();
 	}
 	
-	public void filterCalendars(Vector<String> vCalendarIDs) {
-		// get a list of calendar IDs
-		sCalendarIDs.clear();
-		sCalendarIDs.addAll(vCalendarIDs);
-		
-		// re-set internal cursor
-		if (mCursor != null) UnhookCursor();
-		RefreshCursor();
-		
+	public Vector<String> getCalendarNames() {
+		return sCalendarNames;
 	}
 	
-	public int RefreshCursor() {
-		
-        Date d = new Date();
-        long startQ = d.getTime();
-        String startQS = Long.toString(startQ);
-        Vector<String> sQueryValues = new Vector<String>();
-        
-        // Add our first two filter entries
-        sQueryValues.add(startQS);
-        sQueryValues.add(startQS);
-        
-        // Setup the filters
-        String filterString = "(DTSTART >=? OR DTEND <= ?)";
-        if (sCalendarIDs.size() == 0) {
-        } else {
-        	int i = 0;
-        	filterString += " AND (";
-        	for (String sCalID : sCalendarIDs) {
-        		i++;
-        		if (i > 1) {
-        			filterString += " OR ";
-        		}
-        		filterString += Events.CALENDAR_ID + " = ? ";
-        		sQueryValues.add(sCalID);
-        	}
-        	filterString += ")";
-        }
-        
-        Log.w("com.daemonic.eventviewer",filterString);
-        String[] sQueryVals = new String[sQueryValues.size()];
-        sQueryValues.toArray(sQueryVals);
-        Log.w("com.daemonic.eventviewer",Long.toString(sQueryVals.length));
-        
-        // Query our Events Calendar
-        // Select everything that starts now or later
-        //    and everything that ends now or later
-        // this will catch events in progress and not remove them until they are complete
-        mCursor = mContext.getContentResolver().query(Events.CONTENT_URI, ECOLS, 
-        			filterString, sQueryVals, "DTSTART, DTEND");
-        mCursor.moveToFirst();
-        
-        return mCursor.getCount();
-	}
-	
-	public void UnhookCursor() {
-		// Clean up cursor, unhook from database, clear memory
-		mCursor.close();
-		mCursor = null;
+	public Vector<String> getCalendarIDs() {
+		return sCalendarIDs;
 	}
 	
 }
