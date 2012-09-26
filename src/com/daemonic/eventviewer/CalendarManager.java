@@ -10,7 +10,6 @@ public class CalendarManager {
 	
 	private Vector<String> sCalendarIDs = new Vector<String>();
 	private Vector<String> sCalendarNames = new Vector<String>();
-	public Cursor mCursor = null;
 	private Context mContext = null;
 
 	// Calendar Strings

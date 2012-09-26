@@ -123,7 +123,7 @@ public class EventMainActivity extends Activity {
             case R.id.refresh:
             	updateView();
                 return true;
-            case R.id.filter:
+            case R.id.settings:
             	 // app icon in action bar clicked; go home
                 Intent intent = new Intent().setClass(this, SettingsActivity.class);
                 // Make it a subactivity so we know when it returns
