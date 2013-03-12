@@ -17,8 +17,14 @@
         <item name="android:shadowColor">#888888</item>
         <item name="android:shadowRadius">1.5</item>  
         <item name="android:shadowDx">1</item>  
-        <item name="android:shadowDy">1</item>  
-
+        <item name="android:shadowDy">1</item>
+	</style>
+        
+    <style name="DateTitle" parent="android:Theme.Holo">
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">?android:attr/textColorSecondaryInverse</item>
+        <item name="android:background">@drawable/lightbackground</item>
     </style>
 
 </resources>

@@ -1,6 +1,7 @@
 package com.daemonic.eventviewer;
 
 import java.util.Date;
+import java.util.Set;
 import java.util.Vector;
 
 import android.content.Context;
@@ -27,7 +28,7 @@ public class EventReader {
 		mContext = iContext;
 	}
 	
-	public void filterCalendars(Vector<String> vCalendarIDs) {
+	public void filterCalendars(Set<String> vCalendarIDs) {
 		// get a list of calendar IDs
 		sCalendarIDs.clear();
 		sCalendarIDs.addAll(vCalendarIDs);

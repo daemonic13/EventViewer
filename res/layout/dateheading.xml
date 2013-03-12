@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dateheadertext"
+    style="@style/DateTitle"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:drawableBottom="@drawable/borderline"
+    android:paddingLeft="4dp"
+    android:text="@string/temp" />
+

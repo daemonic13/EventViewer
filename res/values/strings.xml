@@ -20,5 +20,7 @@
 	    <item>2</item>
 	</string-array>
 	    <string name="settings_title">Settings</string>
+	    <string name="dateHeaderTemp">Date Header</string>
+	    <string name="temp">Temporary String</string>
     
 </resources>

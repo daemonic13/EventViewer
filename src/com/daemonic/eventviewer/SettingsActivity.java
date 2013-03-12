@@ -15,7 +15,8 @@ import android.view.MenuItem;
 public class SettingsActivity extends Activity  {
 	
 	public static final String KEY_ITEMS_TO_DISPLAY = "items_to_display";  
-	public static final String KEY_CALS_TO_DISPLAY = "caldisplay";  
+	public static final String KEY_CALS_TO_DISPLAY = "caldisplay";
+	private SettingsFragment k = new SettingsFragment();
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -24,7 +25,7 @@ public class SettingsActivity extends Activity  {
         
         // Display the fragment as the main content.
         getFragmentManager().beginTransaction() 
-                .replace(R.id.settingsview, new SettingsFragment())
+                .replace(R.id.settingsview,k)
                 .commit();
         
         getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -40,7 +41,7 @@ public class SettingsActivity extends Activity  {
         super.onResume();
         // Instance field for listener
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-    	prefs.registerOnSharedPreferenceChangeListener(new SettingsFragment()); 
+    	prefs.registerOnSharedPreferenceChangeListener(k); 
     }
     
     @Override

@@ -13,7 +13,7 @@ public class CalendarManager {
 	private Context mContext = null;
 
 	// Calendar Strings
-	private static final String[] CCOLS = 
+	private static final String[] CCOLS =  
 			new String[] {
 				Calendars._ID,
 				Calendars.NAME
