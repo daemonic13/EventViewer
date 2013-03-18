@@ -2,8 +2,10 @@ package com.daemonic.eventviewer;
 
 import java.text.Format;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Set;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.CalendarContract.Events;
@@ -13,6 +15,7 @@ import android.content.ContentUris;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,9 +28,19 @@ public class EventMainActivity extends Activity {
 	private EventReader mCal;
 	private static final int REQUEST_CODE_PREFERENCES = 1;
 	private int mintMaxItems = 40;
+	private boolean bIsEmulator = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		
+		String model = Build.MODEL;
+		Log.d(LOG_NAME, "model=" + model);
+		String product = Build.PRODUCT;
+	    Log.d(LOG_NAME, "product=" + product);
+	    if (product != null) {
+	    	bIsEmulator = product.equals("sdk") || product.contains("_sdk") || product.contains("sdk_");
+	    }
+	    Log.d(LOG_NAME, "isEmulator=" + bIsEmulator);
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.event_main);
@@ -42,61 +55,87 @@ public class EventMainActivity extends Activity {
 		updateView();
 
 	}
+	
+	private EventInstance returnRandomData(int i) {
+		
+		// Specify Date
+		Calendar cDate = Calendar.getInstance();
+		int j = (i / 10) + 1;
+		Log.w(LOG_NAME,"Day to Add? "+Integer.toString(j));
+		
+		// Modify Date
+		cDate.add(Calendar.DAY_OF_MONTH,j);		
+		cDate.add(Calendar.HOUR,i);
+		Date t = cDate.getTime();
+		
+		cDate.add(Calendar.HOUR,2);
+		Date t2 = cDate.getTime();
+		
+		// build some code to return return random data
+		EventInstance oEvent = new EventInstance();
+		oEvent.set("Testing " + Integer.toString(i),t.getTime() , t2.getTime(), 0);
+		Log.w(LOG_NAME,"Random Data Loop #"+Integer.toString(i));
+		
+		return oEvent;
+	}
 
 	private void updateView() {
-
-		// Find our insertion point
+		
+    	// Find our insertion point
 		ViewGroup insertPoint = (ViewGroup) findViewById(R.id.mainview);
 		insertPoint.removeAllViews();
 
+		int cnt = 0;
 		// Get our calendar manager, query database
-		int cnt = mCal.RefreshCursor();
+		if (!bIsEmulator) { cnt = mCal.RefreshCursor(); }
 
 		// Set up app title to show total number of items
 		String appTitle = getString(R.string.app_name);
 		appTitle += " (" + Long.toString(cnt) + ")";
 		this.setTitle(appTitle);
 
-		String title = "";
-		long start = 0;
-		long end = 0;
-		long eventID = 0;
 		long prevDate = 0;
-		Format df = DateFormat.getDateFormat(this);
 		Format tf = DateFormat.getTimeFormat(this);
 
 		int i = 0;
 		while (i < mintMaxItems) {
-
-			// make sure we don't go too far
-			if (mCal.mCursor.isAfterLast()) {
-				break;
+			
+			EventInstance oEvent;
+			
+			if (!bIsEmulator) {
+				// make sure we don't go too far
+				if (mCal.mCursor.isAfterLast()) {
+					break;
+				}
+				mCal.mCursor.moveToNext();
+				
+				// Create our instance
+				oEvent = new EventInstance();
+				
+				// progress through our cursor
+				try {
+					oEvent.set(mCal.mCursor.getString(0),mCal.mCursor.getLong(1),mCal.mCursor.getLong(2),mCal.mCursor.getLong(3));
+				} catch (Exception e) {
+					// ignore
+				}
+			} else {
+				// use some random data
+				oEvent = returnRandomData(i);
 			}
-			mCal.mCursor.moveToNext();
-
-			// progress through our cursor
 			i++;
-			try {
-				title = mCal.mCursor.getString(0);
-				start = mCal.mCursor.getLong(1);
-				end = mCal.mCursor.getLong(2);
-				eventID = mCal.mCursor.getLong(3);
-			} catch (Exception e) {
-				// ignore
-			}
 			TextView q = null;
 
 			// Add date
 			Calendar rightNow = Calendar.getInstance();
-			rightNow.setTimeInMillis(start);
+			rightNow.setTimeInMillis(oEvent.start);
 			long itemDay = rightNow.get(Calendar.DAY_OF_MONTH);
 			if (prevDate != itemDay)
 			{
 				View vHeader = getLayoutInflater().inflate(R.layout.dateheading, null);
 				q = (TextView) vHeader.findViewById(R.id.dateheadertext);
-				q.setText(DateFormat.format("EEEE MMMM dd, yyyy", start));
+				q.setText(DateFormat.format("EEEE MMMM dd, yyyy", oEvent.start));
 				insertPoint.addView(vHeader);
-				rightNow.setTimeInMillis(start);
+				rightNow.setTimeInMillis(oEvent.start);
 				prevDate = rightNow.get(Calendar.DAY_OF_MONTH);
 			}
 
@@ -105,13 +144,13 @@ public class EventMainActivity extends Activity {
 			View tv = getLayoutInflater().inflate(R.layout.event_item, null);
 			q = (TextView) tv.findViewById(R.id.event_item_datestart);
 			//q.setText(df.format(start) + " " + tf.format(start));
-			q.setText(tf.format(start));
+			q.setText(tf.format(oEvent.start));
 			q = (TextView) tv.findViewById(R.id.event_item_dateend);
 			//q.setText(df.format(end) + " " + tf.format(end));
-			q.setText(tf.format(end));
+			q.setText(tf.format(oEvent.end));
 			q = (TextView) tv.findViewById(R.id.event_item_title);
-			q.setText(title);
-			q.setTag(eventID);
+			q.setText(oEvent.title);
+			q.setTag(oEvent.eventID);
 
 			// Set up on click listener
 			q.setOnClickListener(new View.OnClickListener() {

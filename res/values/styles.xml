@@ -1,30 +1,40 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <style name="AppTheme" parent="android:Theme.Holo" >
+    
+    <style name="MasterStyle" parent="android:Theme.Holo.Light">
+        <!--  Theme.Holo -->
+        <!--  Theme.Holo.Light  -->
+        <!--  Theme.Holo.Light.DarkActionBar  -->        
+    </style>
+    
+    <style name="AppTheme" parent="MasterStyle" >
 		<item name="android:windowTitleSize">46dp</item>
     </style>
-
-    <style name="DateDisplay" parent="android:Theme.Holo" >
+   
+    <style name="DateDisplay" parent="MasterStyle" >
         <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
         <item name="android:padding">2dp</item>
-        </style>
+        <item name="android:textColor">?android:attr/textColorSecondaryInverse</item>
+        <item name="android:background">@android:color/background_dark</item>
+    </style>
          
-    <style name="TitleDisplay" parent="android:Theme.Holo">
-        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+    <style name="TitleDisplay" parent="MasterStyle">
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
         <item name="android:paddingTop">4dp</item>
         <item name="android:paddingBottom">4dp</item>
         <item name="android:textStyle">bold</item>
+        <!-- 
         <item name="android:shadowColor">#888888</item>
         <item name="android:shadowRadius">1.5</item>  
         <item name="android:shadowDx">1</item>  
         <item name="android:shadowDy">1</item>
+         -->
 	</style>
         
-    <style name="DateTitle" parent="android:Theme.Holo">
+    <style name="DateTitle" parent="MasterStyle">
         <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">?android:attr/textColorSecondaryInverse</item>
-        <item name="android:background">@drawable/lightbackground</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:background">@android:color/background_light</item>
     </style>
 
 </resources>
