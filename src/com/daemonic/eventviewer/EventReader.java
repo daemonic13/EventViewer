@@ -88,8 +88,10 @@ public class EventReader {
 	
 	public void UnhookCursor() {
 		// Clean up cursor, unhook from database, clear memory
-		mCursor.close();
-		mCursor = null;
+		if (mCursor != null) { 
+			mCursor.close();
+			mCursor = null;
+		}
 	}
 
 }

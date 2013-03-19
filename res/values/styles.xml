@@ -1,6 +1,6 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
     
-    <style name="MasterStyle" parent="android:Theme.Holo.Light">
+    <style name="MasterStyle" parent="android:Theme.Holo">
         <!--  Theme.Holo -->
         <!--  Theme.Holo.Light  -->
         <!--  Theme.Holo.Light.DarkActionBar  -->        
@@ -13,8 +13,8 @@
     <style name="DateDisplay" parent="MasterStyle" >
         <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
         <item name="android:padding">2dp</item>
-        <item name="android:textColor">?android:attr/textColorSecondaryInverse</item>
-        <item name="android:background">@android:color/background_dark</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <!-- <item name="android:background">@drawable/backgroundsecondary</item>  -->
     </style>
          
     <style name="TitleDisplay" parent="MasterStyle">
@@ -34,7 +34,7 @@
         <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>
-        <item name="android:background">@android:color/background_light</item>
+        <item name="android:background">@drawable/backgroundprimary</item>
     </style>
 
 </resources>

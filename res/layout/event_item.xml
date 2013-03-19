@@ -1,45 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/event_item_text"
+    android:id="@+id/event_item_text_container"
     android:layout_width="match_parent"
-    android:layout_height="40dp"
-    android:background="@drawable/background"
-    android:orientation="horizontal"
+    android:layout_height="42dp"
+    android:gravity="fill_horizontal"
+    android:orientation="vertical"
     tools:context=".EventMainActivity" >
+    
+    <LinearLayout
+        android:id="@+id/event_item_text"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="fill_horizontal"
+        >
 
-    <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="40dp" android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/event_item_datestart"
-            style="@style/DateDisplay"
-            android:layout_width="match_parent"
-            android:layout_height="19dp"
-            android:gravity="center_vertical|center_horizontal"
-            android:text="@string/teststring" />
-       
-        <TextView
-            android:id="@+id/event_item_dateend"
-            style="@style/DateDisplay"
-            android:layout_width="match_parent"
-            android:layout_height="19dp"
-            android:gravity="center_vertical|center_horizontal"
-            android:text="@string/teststring" />
+	    <LinearLayout 
+	        android:layout_width="0dp" 
+	        android:layout_weight="1" 
+	        android:layout_height="40dp" 
+	        android:gravity="fill_horizontal"
+	        android:orientation="vertical" >
+	
+	        <TextView
+	            android:id="@+id/event_item_datestart"
+	            style="@style/DateDisplay"
+	            android:layout_width="match_parent"
+	            android:layout_height="19dp"
+	            android:gravity="right|center_horizontal"
+	            android:text="@string/teststring" />
+	       
+	        <TextView
+	            android:id="@+id/event_item_dateend"
+	            style="@style/DateDisplay"
+	            android:layout_width="match_parent"
+	            android:layout_height="19dp"
+	            android:gravity="right|center_horizontal"
+	            android:maxWidth="10dp"
+	            android:text="@string/teststring" />
+	
+	    </LinearLayout>
+	    
+	    <TextView
+	        android:id="@+id/event_item_title"
+	        style="@style/TitleDisplay"
+	        android:layout_width="0dp"
+	        android:layout_height="40dp"
+	        android:layout_weight="4"
+	        android:gravity="left|center_vertical"
+	        android:paddingLeft="4dp"
+	        android:paddingRight="4dp"
+	        android:text="@string/teststring" >
+	
+	    </TextView>
 
     </LinearLayout>
     
-    <TextView
-        android:id="@+id/event_item_title"
-        style="@style/TitleDisplay"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_weight="4"
-        android:gravity="center_vertical"
-        android:paddingLeft="4dp"
-        android:text="@string/teststring" >
-
-    </TextView>
-
-    
+    <ImageView
+        android:id="@+id/imgBorder"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:gravity="fill_horizontal"
+        android:src="@drawable/borderline" 
+        android:contentDescription="@string/temp"/>
 
 </LinearLayout>

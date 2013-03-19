@@ -96,6 +96,9 @@ public class EventMainActivity extends Activity {
 
 		long prevDate = 0;
 		Format tf = DateFormat.getTimeFormat(this);
+		
+		View currentView = null;
+		ViewGroup vq = null;
 
 		int i = 0;
 		while (i < mintMaxItems) {
@@ -129,12 +132,17 @@ public class EventMainActivity extends Activity {
 			Calendar rightNow = Calendar.getInstance();
 			rightNow.setTimeInMillis(oEvent.start);
 			long itemDay = rightNow.get(Calendar.DAY_OF_MONTH);
+			
 			if (prevDate != itemDay)
 			{
-				View vHeader = getLayoutInflater().inflate(R.layout.dateheading, null);
-				q = (TextView) vHeader.findViewById(R.id.dateheadertext);
+				if (currentView != null){
+					insertPoint.addView(currentView);
+				}
+				currentView = getLayoutInflater().inflate(R.layout.event_dateset, null);
+				vq = (ViewGroup) currentView.findViewById(R.id.datesubview);
+				
+				q = (TextView) currentView.findViewById(R.id.dateheadertext);
 				q.setText(DateFormat.format("EEEE MMMM dd, yyyy", oEvent.start));
-				insertPoint.addView(vHeader);
 				rightNow.setTimeInMillis(oEvent.start);
 				prevDate = rightNow.get(Calendar.DAY_OF_MONTH);
 			}
@@ -163,7 +171,11 @@ public class EventMainActivity extends Activity {
 			});
 
 			// Attach to display
-			insertPoint.addView(tv);
+			vq.addView(tv);
+		}
+		
+		if (currentView != null) {
+			insertPoint.addView(currentView);
 		}
 
 		// Clear our memory
