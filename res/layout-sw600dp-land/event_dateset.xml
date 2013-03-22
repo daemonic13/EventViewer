@@ -25,8 +25,14 @@
             >
 
        </LinearLayout -->
+       <com.daemonic.eventviewer.DashboardLayout 
+           android:id="@+id/datesubview"
+           android:layout_width="fill_parent" 
+           android:layout_height="wrap_content"
+           android:background="@drawable/lightbackground">           
+       </com.daemonic.eventviewer.DashboardLayout>
 
-<!--  this doesn't work very well. :( -->
+<!--  this doesn't work very well. :( 
     <GridLayout
         android:id="@+id/datesubview"
         android:layout_width="fill_parent"
@@ -38,6 +44,7 @@
         android:useDefaultMargins="true" >
 
     </GridLayout>       
+-->
        
  </LinearLayout>    
 
