@@ -22,15 +22,11 @@ import android.view.View;
 import android.view.ViewGroup;
  
 /**
- * Custom layout that arranges children in a grid-like manner, optimizing for even horizontal and
- * vertical whitespace.
+ * Custom Layout that does a two column view (supposedly...)
  */
 public class DashboardLayout extends ViewGroup {
- 
-    private static final int UNEVEN_GRID_PENALTY_MULTIPLIER = 10;
- 
-    private int mMaxChildWidth = 0;
-    private int mMaxChildHeight = 0;
+	
+	final int mColumnCount = 3;
  
     public DashboardLayout(Context context) {
         super(context, null);
@@ -46,56 +42,64 @@ public class DashboardLayout extends ViewGroup {
  
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        
-        int parentWidth = MeasureSpec.getSize(widthMeasureSpec);
-        int parentHeight = MeasureSpec.getSize(heightMeasureSpec);
-        
-        Log.w(EventMainActivity.LOG_NAME,"Parent Height: " + Integer.toString(parentHeight) + ", width: " + Integer.toString(parentWidth));
-        
-        mMaxChildWidth = parentWidth;
-        mMaxChildHeight = 0;
-        
-        // Measure once to find the maximum child size. 
-        int childWidthMeasureSpec = MeasureSpec.makeMeasureSpec(
-                MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.AT_MOST);
-        int childHeightMeasureSpec = MeasureSpec.makeMeasureSpec(
-                MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.AT_MOST);
- 
-        final int count = getChildCount();
-        for (int i = 0; i < count; i++) {
-            final View child = getChildAt(i);
-            if (child.getVisibility() == GONE) {
-                continue;
-            } 
-            child.measure(childWidthMeasureSpec, childHeightMeasureSpec); 
-            mMaxChildWidth = Math.max(mMaxChildWidth, child.getMeasuredWidth());
-            mMaxChildHeight = Math.max(mMaxChildHeight, child.getMeasuredHeight());
-        }
- 
-        // Measure again for each child to be exactly the same size.
-        childWidthMeasureSpec = MeasureSpec.makeMeasureSpec(
-                mMaxChildWidth, MeasureSpec.EXACTLY);
-        childHeightMeasureSpec = MeasureSpec.makeMeasureSpec(
-                mMaxChildHeight, MeasureSpec.EXACTLY);
- 
-        for (int i = 0; i < count; i++) {
-            final View child = getChildAt(i);
-            if (child.getVisibility() == GONE) {
-                continue;
-            }
-             child.measure(childWidthMeasureSpec, childHeightMeasureSpec);
-        }
-        
-        
-       setMeasuredDimension(
-                resolveSize(mMaxChildWidth, parentWidth),
-                resolveSize(mMaxChildHeight, heightMeasureSpec));
-    }
+    	
+		int widthSize = MeasureSpec.getSize(widthMeasureSpec) - getPaddingRight();
+		Log.w(EventMainActivity.LOG_NAME,"WidthSize = " + Integer.toString(widthSize));
+		Log.w(EventMainActivity.LOG_NAME,"onMeasure widthSpec:" + Integer.toString(widthMeasureSpec) + ", heightSpec:" + Integer.toString(heightMeasureSpec));
+		int height = 0;
+
+		final int count = getChildCount();
+		
+		if (count == 0) {
+			// Nothing to draw
+			Log.w(EventMainActivity.LOG_NAME,"Nothing to draw...");
+			setMeasuredDimension(resolveSize(0,widthMeasureSpec),resolveSize(0,heightMeasureSpec));
+			return;
+		}
+		
+		setMeasuredDimension(resolveSize(widthSize, widthMeasureSpec),
+				resolveSize(height, heightMeasureSpec));
+		
+		// Determine Measure Specs for Children
+		int maxChildSize = (widthSize/mColumnCount);
+		Log.w(EventMainActivity.LOG_NAME,"Max Width: " + Integer.toString(maxChildSize));
+		int cwidthMeasureSpec = MeasureSpec.makeMeasureSpec( maxChildSize, MeasureSpec.AT_MOST);
+		int cheightMeasureSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
+		
+		int[] nHeights = new int[mColumnCount];
+		
+		// Loop through all the children
+		for (int i = 0; i < count; i++) {
+			View child = getChildAt(i);
+			measureChild(child, cwidthMeasureSpec, cheightMeasureSpec);
+			Log.w(EventMainActivity.LOG_NAME,"Measured child:" 
+								+ Integer.toString(child.getMeasuredWidth()) + "," 
+								+ Integer.toString(child.getMeasuredWidth()));
+			if (i % mColumnCount == 0) {
+				nHeights[i % mColumnCount] += child.getMeasuredHeight();
+			}
+		}
+		
+		height = nHeights[0];
+		for (int i = 0; i < mColumnCount; i++) {
+			height = Math.max(height,nHeights[i]);
+		}
+		
+		// Add padding, halve height
+		height += getPaddingBottom() + getPaddingTop();
+		Log.w(EventMainActivity.LOG_NAME,"Measured: "     + Integer.toString(widthSize)
+													+ "," + Integer.toString(height));
+
+		setMeasuredDimension(resolveSize(widthSize, widthMeasureSpec),
+				resolveSize(height, heightMeasureSpec));
+	}
  
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         int width = r - l;
         int height = b - t;
+        Log.w(EventMainActivity.LOG_NAME,"Layout Width:" + Integer.toString(width) 
+        							 + ", Layout Height:"+ Integer.toString(height));
  
         final int count = getChildCount();
  
@@ -113,25 +117,20 @@ public class DashboardLayout extends ViewGroup {
             return;
         }
  
-        // Horizontal and vertical space between items
-        int hSpace = 0;
-        int vSpace = 0;
- 
-        int cols = 2;
-        int rows = count / 2 + 1;
-  
-        // Lay out children based on calculated best-fit number of rows and cols.
- 
-        // If we chose a layout that has negative horizontal or vertical space, force it to zero.
-        hSpace = Math.max(0, hSpace);
-        vSpace = Math.max(0, vSpace);
+        int cols = mColumnCount;
+        int rows = visibleCount / cols + 1;
+        
+        if (rows == 0) {
+        	return;
+        }
  
         // Re-use width/height variables to be child width/height.
-        width = (width - hSpace * (cols + 1)) / cols;
-        height = (height - vSpace * (rows + 1)) / rows;
+        int cWidth = (width - (cols + 1)) / cols;
+        int cHeight = (height - (rows + 1)) / rows;
+        Log.w(EventMainActivity.LOG_NAME,"Child Width: " + Integer.toString(cWidth) 
+        							 + ", Child Height: " + Integer.toString(cHeight));
  
-        int left, top;
-        int col, row;
+        int col = 0, row = 0;
         int visibleIndex = 0;
         for (int i = 0; i < count; i++) {
             final View child = getChildAt(i);
@@ -139,15 +138,19 @@ public class DashboardLayout extends ViewGroup {
                 continue;
             }
  
-            row = visibleIndex / cols;
+            // Row & Column Position
             col = visibleIndex % cols;
+            row = visibleIndex / cols;
  
-            left = hSpace * (col + 1) + width * col;
-            top = vSpace * (row + 1) + height * row;
- 
-            child.layout(left, top,
-                    (hSpace == 0 && col == cols - 1) ? r : (left + width),
-                    (vSpace == 0 && row == rows - 1) ? b : (top + height));
+            // Calculate our children's size
+            int cLeft = cWidth * col;
+            int cTop = cHeight * row;            
+            int cBottom = (row == rows - 1) ? b : (cTop + cHeight);
+            int cRight = (col == cols - 1) ? r : (cLeft + cWidth);
+            Log.w(EventMainActivity.LOG_NAME,"Child:" + Integer.toString(visibleIndex) +  "(" + Integer.toString(cLeft) + "," + Integer.toString(cTop)
+            		+ "," + Integer.toString(cRight) + "," + Integer.toString(cBottom) + ")");
+            
+            child.layout(cLeft, cTop, cRight, cBottom);
             ++visibleIndex;
         }
     }

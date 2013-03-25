@@ -4,6 +4,7 @@
     style="@style/DateTitle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:drawableTop="@drawable/borderline"
     android:drawableBottom="@drawable/borderline"
     android:paddingLeft="4dp"
     android:text="@string/temp" />

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-         android:layout_width="fill_parent"
+         android:layout_width="match_parent"
          android:layout_height="wrap_content"
          android:orientation="vertical" 
          android:id="@+id/event_dateset">
@@ -18,33 +18,13 @@
         android:src="@drawable/borderline" 
         android:contentDescription="@string/temp"/>
 
-      <!-- LinearLayout
-           android:id="@+id/datesubview"
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-            >
 
-       </LinearLayout -->
        <com.daemonic.eventviewer.DashboardLayout 
            android:id="@+id/datesubview"
-           android:layout_width="fill_parent" 
+           android:layout_width="match_parent" 
            android:layout_height="wrap_content"
-           android:background="@drawable/lightbackground">           
+           >           
        </com.daemonic.eventviewer.DashboardLayout>
 
-<!--  this doesn't work very well. :( 
-    <GridLayout
-        android:id="@+id/datesubview"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:alignmentMode="alignMargins"
-        android:columnCount="3"
-        android:gravity="fill_horizontal"
-        android:orientation="horizontal"
-        android:useDefaultMargins="true" >
-
-    </GridLayout>       
--->
-       
  </LinearLayout>    
 

@@ -138,7 +138,7 @@ public class EventMainActivity extends Activity {
 				if (currentView != null){
 					insertPoint.addView(currentView);
 				}
-				currentView = getLayoutInflater().inflate(R.layout.event_dateset, null);
+				currentView = getLayoutInflater().inflate(R.layout.event_dateset, insertPoint, false);
 				vq = (ViewGroup) currentView.findViewById(R.id.datesubview);
 				
 				q = (TextView) currentView.findViewById(R.id.dateheadertext);
@@ -149,13 +149,18 @@ public class EventMainActivity extends Activity {
 
 			// Add event entry
 			// Setup TextViews for start, end, title
-			View tv = getLayoutInflater().inflate(R.layout.event_item, null);
+			View tv = getLayoutInflater().inflate(R.layout.event_item, vq, false);
 			q = (TextView) tv.findViewById(R.id.event_item_datestart);
-			//q.setText(df.format(start) + " " + tf.format(start));
-			q.setText(tf.format(oEvent.start));
-			q = (TextView) tv.findViewById(R.id.event_item_dateend);
-			//q.setText(df.format(end) + " " + tf.format(end));
-			q.setText(tf.format(oEvent.end));
+			if (q != null) {
+				//q.setText(df.format(start) + " " + tf.format(start));
+				q.setText(tf.format(oEvent.start));
+				q = (TextView) tv.findViewById(R.id.event_item_dateend);
+				//q.setText(df.format(end) + " " + tf.format(end));
+				q.setText(tf.format(oEvent.end));
+			} else {
+				q = (TextView) tv.findViewById(R.id.event_item_datedisplay);
+				q.setText(tf.format(oEvent.start) + "\n" + tf.format(oEvent.end));
+			}
 			q = (TextView) tv.findViewById(R.id.event_item_title);
 			q.setText(oEvent.title);
 			q.setTag(oEvent.eventID);
@@ -177,6 +182,8 @@ public class EventMainActivity extends Activity {
 		if (currentView != null) {
 			insertPoint.addView(currentView);
 		}
+		
+		Log.w(LOG_NAME,"Finished Adding Items...");
 
 		// Clear our memory
 		mCal.UnhookCursor();

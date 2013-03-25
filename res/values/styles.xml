@@ -1,6 +1,6 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
     
-    <style name="MasterStyle" parent="android:Theme.Holo">
+    <style name="MasterStyle" parent="android:Theme.Holo.Light">
         <!--  Theme.Holo -->
         <!--  Theme.Holo.Light  -->
         <!--  Theme.Holo.Light.DarkActionBar  -->        
