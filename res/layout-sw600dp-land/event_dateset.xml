@@ -18,7 +18,6 @@
         android:src="@drawable/borderline" 
         android:contentDescription="@string/temp"/>
 
-
        <com.daemonic.eventviewer.DashboardLayout 
            android:id="@+id/datesubview"
            android:layout_width="match_parent" 

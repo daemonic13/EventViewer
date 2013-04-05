@@ -89,7 +89,8 @@ public class DashboardLayout extends ViewGroup {
 		height += getPaddingBottom() + getPaddingTop();
 		Log.w(EventMainActivity.LOG_NAME,"Measured: "     + Integer.toString(widthSize)
 													+ "," + Integer.toString(height));
-
+		
+		// Set our dimensions
 		setMeasuredDimension(resolveSize(widthSize, widthMeasureSpec),
 				resolveSize(height, heightMeasureSpec));
 	}

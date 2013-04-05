@@ -4,7 +4,14 @@
          android:layout_height="wrap_content"
          android:orientation="vertical" 
          android:id="@+id/event_dateset">
-
+         
+      <ImageView
+        android:id="@+id/imgBorderTop"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:src="@drawable/borderline" 
+        android:contentDescription="@string/temp" />
+    
       <include
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
@@ -12,7 +19,7 @@
              />
       
       <ImageView
-        android:id="@+id/imgBorder"
+        android:id="@+id/imgBorderBottom"
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:src="@drawable/borderline" 
