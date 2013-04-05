@@ -73,7 +73,7 @@ public class EventMainActivity extends Activity {
 		
 		// build some code to return return random data
 		EventInstance oEvent = new EventInstance();
-		oEvent.set("Testing " + Integer.toString(i),t.getTime() , t2.getTime(), 0);
+		oEvent.set("Testing " + Integer.toString(i),t.getTime() , t2.getTime(), 0, false);
 		Log.w(LOG_NAME,"Random Data Loop #"+Integer.toString(i));
 		
 		return oEvent;
@@ -106,21 +106,9 @@ public class EventMainActivity extends Activity {
 			EventInstance oEvent;
 			
 			if (!bIsEmulator) {
-				// make sure we don't go too far
-				if (mCal.mCursor.isAfterLast()) {
-					break;
-				}
-				mCal.mCursor.moveToNext();
-				
-				// Create our instance
-				oEvent = new EventInstance();
-				
-				// progress through our cursor
-				try {
-					oEvent.set(mCal.mCursor.getString(0),mCal.mCursor.getLong(1),mCal.mCursor.getLong(2),mCal.mCursor.getLong(3));
-				} catch (Exception e) {
-					// ignore
-				}
+     			// Create our instance
+				oEvent = mCal.getNext();
+				if (oEvent == null) { break; }
 			} else {
 				// use some random data
 				oEvent = returnRandomData(i);
@@ -148,18 +136,26 @@ public class EventMainActivity extends Activity {
 			}
 
 			// Add event entry
+			String startTime;
+			String endTime;
+			if (oEvent.allDay) {
+				startTime = "All Day";
+				endTime = " ";
+			} else {
+				startTime = tf.format(oEvent.start);
+				endTime = tf.format(oEvent.end);
+			}
+			
 			// Setup TextViews for start, end, title
 			View tv = getLayoutInflater().inflate(R.layout.event_item, vq, false);
 			q = (TextView) tv.findViewById(R.id.event_item_datestart);
 			if (q != null) {
-				//q.setText(df.format(start) + " " + tf.format(start));
-				q.setText(tf.format(oEvent.start));
+				q.setText(startTime);
 				q = (TextView) tv.findViewById(R.id.event_item_dateend);
-				//q.setText(df.format(end) + " " + tf.format(end));
-				q.setText(tf.format(oEvent.end));
-			} else {
+				q.setText(endTime);
+    		} else {
 				q = (TextView) tv.findViewById(R.id.event_item_datedisplay);
-				q.setText(tf.format(oEvent.start) + "\n" + tf.format(oEvent.end));
+				q.setText(startTime + " " +endTime);
 			}
 			q = (TextView) tv.findViewById(R.id.event_item_title);
 			q.setText(oEvent.title);

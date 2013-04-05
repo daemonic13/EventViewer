@@ -5,19 +5,21 @@ package com.daemonic.eventviewer;
 
 public class EventInstance {
 	
-	public String title;
+	public String title; 
 	public long start;
 	public long end;
 	public long eventID;
+	public boolean allDay;
 	
 	public EventInstance() {
 		
 	}
 	
-	public void set(String iTitle,long iStart,long iEnd,long iEvent){
+	public void set(String iTitle,long iStart,long iEnd,long iEvent, boolean iAllDay){
 		title = iTitle;
 		start = iStart;
 		end = iEnd;
 		eventID = iEvent;
+		allDay = iAllDay;
 	}
 };

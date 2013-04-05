@@ -64,16 +64,16 @@ public class EventViewerWidget extends AppWidgetProvider {
        while (i < mintMaxItems) {
        	
        	// make sure we don't go too far
-       	if (mCal.mCursor.isAfterLast()) { break; }
-       	mCal.mCursor.moveToNext();
+       	//if (mCal.mCursor.isAfterLast()) { break; }
+       	//mCal.mCursor.moveToNext();
        	
        	// progress through our cursor
        	i++;
        	try {
-		   	title = mCal.mCursor.getString(0);
-		   	start = mCal.mCursor.getLong(1);
-		   	end = mCal.mCursor.getLong(2);
-		   	eventID = mCal.mCursor.getLong(3);
+		   	//title = mCal.mCursor.getString(0);
+		   	//start = mCal.mCursor.getLong(1);
+		   	//end = mCal.mCursor.getLong(2);
+		   	//eventID = mCal.mCursor.getLong(3);
 		   } catch (Exception e) {
 		   	//ignore
 		   }

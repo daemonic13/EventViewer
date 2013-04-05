@@ -95,7 +95,7 @@ public class SettingsActivity extends Activity  {
             if (key.equals(KEY_ITEMS_TO_DISPLAY)) {
                 Preference connectionPref = findPreference(key);
                 // Set summary to be the user-description for the selected value
-                connectionPref.setSummary(R.string.items_to_display_summary + "(" + sharedPreferences.getString(key, "") + ")");
+                connectionPref.setSummary(getString(R.string.items_to_display_summary) + "(" + sharedPreferences.getString(key, "") + ")");
                 Log.w(EventMainActivity.LOG_NAME, "Setting Dialog Preference");
             }
         }

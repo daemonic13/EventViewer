@@ -13,6 +13,14 @@ public final class R {
         public static final int values_array=0x7f060001;
     }
     public static final class attr {
+        /** <p>Must be an integer value, such as "<code>100</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int numColumns=0x7f010000;
     }
     public static final class drawable {
         public static final int background=0x7f020000;
@@ -31,35 +39,35 @@ public final class R {
     public static final class id {
         public static final int dateheadertext=0x7f090001;
         public static final int datesubview=0x7f090005;
-        public static final int editText1=0x7f090011;
+        public static final int editText1=0x7f090010;
         public static final int event_dateset=0x7f090002;
-        public static final int event_item_datedisplay=0x7f09000b;
-        public static final int event_item_dateend=0x7f09000a;
-        public static final int event_item_datestart=0x7f090009;
-        public static final int event_item_text_container=0x7f090007;
-        public static final int event_item_title=0x7f090008;
-        public static final int imgBorder=0x7f090006;
-        public static final int imgBorderBottom=0x7f090004;
+        public static final int event_item_datedisplay=0x7f09000a;
+        public static final int event_item_dateend=0x7f090009;
+        public static final int event_item_datestart=0x7f090008;
+        public static final int event_item_text_container=0x7f090006;
+        public static final int event_item_title=0x7f090007;
+        public static final int imgBorder=0x7f090004;
         public static final int imgBorderTop=0x7f090003;
-        public static final int items_desc=0x7f090010;
-        public static final int items_title=0x7f09000f;
-        public static final int mainview=0x7f09000d;
-        public static final int mainviewscroll=0x7f09000c;
-        public static final int menu_settings=0x7f090012;
-        public static final int refresh=0x7f090013;
-        public static final int settings=0x7f090014;
+        public static final int items_desc=0x7f09000f;
+        public static final int items_title=0x7f09000e;
+        public static final int mainview=0x7f09000c;
+        public static final int mainviewscroll=0x7f09000b;
+        public static final int menu_settings=0x7f090011;
+        public static final int refresh=0x7f090012;
+        public static final int settings=0x7f090013;
         public static final int settingsview=0x7f090000;
-        public static final int widget_main=0x7f09000e;
+        public static final int widget_main=0x7f09000d;
     }
     public static final class layout {
         public static final int activity_settings=0x7f030000;
         public static final int dateheading=0x7f030001;
         public static final int event_dateset=0x7f030002;
-        public static final int event_item=0x7f030003;
-        public static final int event_item_orig=0x7f030004;
-        public static final int event_main=0x7f030005;
-        public static final int event_widget=0x7f030006;
-        public static final int preference_number=0x7f030007;
+        public static final int event_datesubview=0x7f030003;
+        public static final int event_item=0x7f030004;
+        public static final int event_item_orig=0x7f030005;
+        public static final int event_main=0x7f030006;
+        public static final int event_widget=0x7f030007;
+        public static final int preference_number=0x7f030008;
     }
     public static final class menu {
         public static final int activity_settings=0x7f080000;
@@ -109,4 +117,33 @@ public final class R {
         public static final int eventviewerwidget=0x7f040000;
         public static final int settings=0x7f040001;
     }
+    public static final class styleable {
+        /** Attributes that can be used with a ColumnLayout.
+           <p>Includes the following attributes:</p>
+           <table>
+           <colgroup align="left" />
+           <colgroup align="left" />
+           <tr><th>Attribute</th><th>Description</th></tr>
+           <tr><td><code>{@link #ColumnLayout_numColumns com.daemonic.eventviewer:numColumns}</code></td><td></td></tr>
+           </table>
+           @see #ColumnLayout_numColumns
+         */
+        public static final int[] ColumnLayout = {
+            0x7f010000
+        };
+        /**
+          <p>This symbol is the offset where the {@link com.daemonic.eventviewer.R.attr#numColumns}
+          attribute's value can be found in the {@link #ColumnLayout} array.
+
+
+          <p>Must be an integer value, such as "<code>100</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name android:numColumns
+        */
+        public static final int ColumnLayout_numColumns = 0;
+    };
 }

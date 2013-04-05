@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <declare-styleable name="ColumnLayout">
+        <attr name="numColumns" format="integer" />
+    </declare-styleable>
+</resources>

@@ -1,42 +1,46 @@
 package com.daemonic.eventviewer;
-/*
- * Copyright 2011 Google Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
  
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
  
 /**
- * Custom Layout that does a two column view (supposedly...)
+ * Custom Layout that create a configurable column layout
  */
-public class DashboardLayout extends ViewGroup {
+public class ColumnLayout extends ViewGroup {
 	
-	final int mColumnCount = 3;
+	private int mColumnCount = 1;
  
-    public DashboardLayout(Context context) {
+    public ColumnLayout(Context context) {
         super(context, null);
     }
  
-    public DashboardLayout(Context context, AttributeSet attrs) {
+    public ColumnLayout(Context context, AttributeSet attrs) {
         super(context, attrs, 0);
+        
+        TypedArray a = context.obtainStyledAttributes(attrs,
+        		R.styleable.ColumnLayout);
+        	 
+        // Get our Custom Properties
+    	final int N = a.getIndexCount();
+    	for (int i = 0; i < N; ++i)
+    	{
+    	    int attr = a.getIndex(i);
+    	    switch (attr)
+    	    {
+    	        case R.styleable.ColumnLayout_numColumns:
+    	        	mColumnCount = a.getInteger(attr, 1);
+    	            break;
+    	    }
+    	}
+    	a.recycle();
+
     }
  
-    public DashboardLayout(Context context, AttributeSet attrs, int defStyle) {
+    public ColumnLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
  
@@ -57,9 +61,6 @@ public class DashboardLayout extends ViewGroup {
 			return;
 		}
 		
-		setMeasuredDimension(resolveSize(widthSize, widthMeasureSpec),
-				resolveSize(height, heightMeasureSpec));
-		
 		// Determine Measure Specs for Children
 		int maxChildSize = (widthSize/mColumnCount);
 		Log.w(EventMainActivity.LOG_NAME,"Max Width: " + Integer.toString(maxChildSize));
@@ -72,12 +73,10 @@ public class DashboardLayout extends ViewGroup {
 		for (int i = 0; i < count; i++) {
 			View child = getChildAt(i);
 			measureChild(child, cwidthMeasureSpec, cheightMeasureSpec);
-			Log.w(EventMainActivity.LOG_NAME,"Measured child:" 
-								+ Integer.toString(child.getMeasuredWidth()) + "," 
-								+ Integer.toString(child.getMeasuredWidth()));
-			if (i % mColumnCount == 0) {
-				nHeights[i % mColumnCount] += child.getMeasuredHeight();
-			}
+			Log.w(EventMainActivity.LOG_NAME,"Measured child: " 
+								+ Integer.toString(child.getMeasuredWidth()) + ","
+								+ Integer.toString(child.getMeasuredHeight()));
+			nHeights[i % mColumnCount] += child.getMeasuredHeight();
 		}
 		
 		height = nHeights[0];
@@ -119,17 +118,21 @@ public class DashboardLayout extends ViewGroup {
         }
  
         int cols = mColumnCount;
-        int rows = visibleCount / cols + 1;
+        int rows = visibleCount / cols;
+        if (visibleCount % cols != 0) {
+        	rows++;
+        }
+        Log.w(EventMainActivity.LOG_NAME,"Rows == " + Integer.toString(rows));
         
         if (rows == 0) {
         	return;
         }
  
         // Re-use width/height variables to be child width/height.
-        int cWidth = (width - (cols + 1)) / cols;
-        int cHeight = (height - (rows + 1)) / rows;
-        Log.w(EventMainActivity.LOG_NAME,"Child Width: " + Integer.toString(cWidth) 
-        							 + ", Child Height: " + Integer.toString(cHeight));
+        int cWidth = width / cols;
+        int cHeight = height / rows;
+        Log.w(EventMainActivity.LOG_NAME,"Child Width: " + Long.toString(cWidth) 
+        							 + ", Child Height: " + Long.toString(cHeight));
  
         int col = 0, row = 0;
         int visibleIndex = 0;
@@ -146,10 +149,10 @@ public class DashboardLayout extends ViewGroup {
             // Calculate our children's size
             int cLeft = cWidth * col;
             int cTop = cHeight * row;            
-            int cBottom = (row == rows - 1) ? b : (cTop + cHeight);
-            int cRight = (col == cols - 1) ? r : (cLeft + cWidth);
-            Log.w(EventMainActivity.LOG_NAME,"Child:" + Integer.toString(visibleIndex) +  "(" + Integer.toString(cLeft) + "," + Integer.toString(cTop)
-            		+ "," + Integer.toString(cRight) + "," + Integer.toString(cBottom) + ")");
+            int cBottom = cTop + cHeight;
+            int cRight = cLeft + cWidth;
+            Log.w(EventMainActivity.LOG_NAME,"Child:" + Integer.toString(visibleIndex) +  "(" + Long.toString(cLeft) + "," + Long.toString(cTop)
+            		+ "," + Long.toString(cRight) + "," + Long.toString(cBottom) + ")");
             
             child.layout(cLeft, cTop, cRight, cBottom);
             ++visibleIndex;

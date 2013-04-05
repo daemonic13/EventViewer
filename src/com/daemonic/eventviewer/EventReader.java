@@ -7,22 +7,42 @@ import java.util.Vector;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.CalendarContract.Events;
+import android.provider.CalendarContract.Instances;
 import android.util.Log;
 
 public class EventReader {
 	
-	public Cursor mCursor = null;
+	private Cursor mCursor = null;
 	private Context mContext = null;
 	private Vector<String> sCalendarIDs = new Vector<String>();
 	
 	// Event Calendar Strings
 	private static final String[] ECOLS = 
-			new String[] { 
-				Events.TITLE, 
-				Events.DTSTART, 
-				Events.DTEND, 
-				Events._ID
+			new String[] {
+				Events.DTSTART,
+				Events.DTEND
+				//"MAX("+Events.DTSTART+")", 
+				//"MAX("+Events.DTEND+")"
 			};
+
+	// Instance events
+	private static final String[] ICOLS = 
+			new String[] { 
+				Instances.TITLE,
+				Instances._ID,
+				Instances.DTSTART,
+				Instances.DTEND,
+				Instances.ALL_DAY,
+				Instances.EVENT_ID,
+				Instances.BEGIN,
+				Instances.END
+			};
+	
+	private static final int iTitlePosition = 0;
+	private static final int iIDPosition = 5;
+	private static final int iDateStartPosition = 6;
+	private static final int iDateEndPosition = 7;
+	private static final int iAllDayPosition = 4;
 	
 	public EventReader(Context iContext) {
 		mContext = iContext;
@@ -79,8 +99,21 @@ public class EventReader {
         // Select everything that starts now or later
         //    and everything that ends now or later
         // this will catch events in progress and not remove them until they are complete
-        mCursor = mContext.getContentResolver().query(Events.CONTENT_URI, ECOLS, 
-        			filterString, sQueryVals, "DTSTART, DTEND");
+        Cursor tCursor = mContext.getContentResolver().query(Events.CONTENT_URI, ECOLS,
+    			filterString, sQueryVals, null);
+        
+        tCursor.moveToFirst();
+        long endDate = 0;
+        while (!tCursor.isAfterLast())
+        {
+        	long tDate = Math.max(tCursor.getLong(0),tCursor.getLong(1));
+        	endDate = Math.max(tDate,endDate);
+        	tCursor.moveToNext();
+        }
+        tCursor.close();
+        
+        // Get All Instances over our time period
+        mCursor = Instances.query(mContext.getContentResolver(), ICOLS, startQ, endDate);
         mCursor.moveToFirst();
         
         return mCursor.getCount();
@@ -93,5 +126,35 @@ public class EventReader {
 			mCursor = null;
 		}
 	}
-
+	
+	public EventInstance getNext()	{
+		EventInstance eInstance = null;
+		if (!pastEnd()) {
+			
+			// get next item
+			eInstance = new EventInstance();
+			
+			// progress through our cursor
+			try {
+				eInstance.set(	mCursor.getString(iTitlePosition),
+								mCursor.getLong(iDateStartPosition),
+								mCursor.getLong(iDateEndPosition),
+								mCursor.getLong(iIDPosition),
+								(mCursor.getLong(iAllDayPosition)!=0) );
+			} catch (Exception e) {
+				// log error?
+			}
+			
+			mCursor.moveToNext();
+		}
+		return eInstance;
+	}
+	
+	public boolean pastEnd()	{
+		return mCursor.isAfterLast();
+	}
+	
+	public void resetQuery() {
+		mCursor.moveToFirst();
+	}
 }

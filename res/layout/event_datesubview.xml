@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<com.daemonic.eventviewer.ColumnLayout
+    	   xmlns:android="http://schemas.android.com/apk/res/android"
+    	   xmlns:api="http://schemas.android.com/apk/res/com.daemonic.eventviewer"
+           android:id="@+id/datesubview"
+           android:layout_width="match_parent" 
+           android:layout_height="wrap_content"
+           api:numColumns="1"
+           >
+</com.daemonic.eventviewer.ColumnLayout>
