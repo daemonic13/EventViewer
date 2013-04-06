@@ -8,6 +8,13 @@
                 android:dialogTitle="@string/items_to_display_dialog_title"
                 android:defaultValue="40"
                  />
+         
+    <EditTextPreference
+        android:title="@string/date_limit"
+        android:dialogTitle="@string/date_limit"
+        android:summary="@string/date_limit_summary"
+        android:key="maxdays"
+        android:defaultValue="120" />
      
     <MultiSelectListPreference 
     	android:title="@string/cal_display" 
@@ -17,5 +24,5 @@
     	android:entries="@array/values_array"
     	android:entryValues="@array/values_array"
     	android:defaultValue="@array/empty_array" />
-
+    
 </PreferenceScreen>

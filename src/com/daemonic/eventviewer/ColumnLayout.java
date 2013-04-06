@@ -48,22 +48,22 @@ public class ColumnLayout extends ViewGroup {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
     	
 		int widthSize = MeasureSpec.getSize(widthMeasureSpec) - getPaddingRight();
-		Log.w(EventMainActivity.LOG_NAME,"WidthSize = " + Integer.toString(widthSize));
-		Log.w(EventMainActivity.LOG_NAME,"onMeasure widthSpec:" + Integer.toString(widthMeasureSpec) + ", heightSpec:" + Integer.toString(heightMeasureSpec));
+		//Log.w(EventMainActivity.LOG_NAME,"WidthSize = " + Integer.toString(widthSize));
+		//Log.w(EventMainActivity.LOG_NAME,"onMeasure widthSpec:" + Integer.toString(widthMeasureSpec) + ", heightSpec:" + Integer.toString(heightMeasureSpec));
 		int height = 0;
 
 		final int count = getChildCount();
 		
 		if (count == 0) {
 			// Nothing to draw
-			Log.w(EventMainActivity.LOG_NAME,"Nothing to draw...");
+			//Log.w(EventMainActivity.LOG_NAME,"Nothing to draw...");
 			setMeasuredDimension(resolveSize(0,widthMeasureSpec),resolveSize(0,heightMeasureSpec));
 			return;
 		}
 		
 		// Determine Measure Specs for Children
 		int maxChildSize = (widthSize/mColumnCount);
-		Log.w(EventMainActivity.LOG_NAME,"Max Width: " + Integer.toString(maxChildSize));
+		//Log.w(EventMainActivity.LOG_NAME,"Max Width: " + Integer.toString(maxChildSize));
 		int cwidthMeasureSpec = MeasureSpec.makeMeasureSpec( maxChildSize, MeasureSpec.AT_MOST);
 		int cheightMeasureSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
 		
@@ -73,9 +73,9 @@ public class ColumnLayout extends ViewGroup {
 		for (int i = 0; i < count; i++) {
 			View child = getChildAt(i);
 			measureChild(child, cwidthMeasureSpec, cheightMeasureSpec);
-			Log.w(EventMainActivity.LOG_NAME,"Measured child: " 
-								+ Integer.toString(child.getMeasuredWidth()) + ","
-								+ Integer.toString(child.getMeasuredHeight()));
+			//Log.w(EventMainActivity.LOG_NAME,"Measured child: " 
+			//					+ Integer.toString(child.getMeasuredWidth()) + ","
+			//					+ Integer.toString(child.getMeasuredHeight()));
 			nHeights[i % mColumnCount] += child.getMeasuredHeight();
 		}
 		
@@ -86,8 +86,8 @@ public class ColumnLayout extends ViewGroup {
 		
 		// Add padding, halve height
 		height += getPaddingBottom() + getPaddingTop();
-		Log.w(EventMainActivity.LOG_NAME,"Measured: "     + Integer.toString(widthSize)
-													+ "," + Integer.toString(height));
+		//Log.w(EventMainActivity.LOG_NAME,"Measured: "     + Integer.toString(widthSize)
+		//											+ "," + Integer.toString(height));
 		
 		// Set our dimensions
 		setMeasuredDimension(resolveSize(widthSize, widthMeasureSpec),
@@ -98,8 +98,8 @@ public class ColumnLayout extends ViewGroup {
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         int width = r - l;
         int height = b - t;
-        Log.w(EventMainActivity.LOG_NAME,"Layout Width:" + Integer.toString(width) 
-        							 + ", Layout Height:"+ Integer.toString(height));
+        //Log.w(EventMainActivity.LOG_NAME,"Layout Width:" + Integer.toString(width) 
+        //							 + ", Layout Height:"+ Integer.toString(height));
  
         final int count = getChildCount();
  
@@ -122,7 +122,7 @@ public class ColumnLayout extends ViewGroup {
         if (visibleCount % cols != 0) {
         	rows++;
         }
-        Log.w(EventMainActivity.LOG_NAME,"Rows == " + Integer.toString(rows));
+        //Log.w(EventMainActivity.LOG_NAME,"Rows == " + Integer.toString(rows));
         
         if (rows == 0) {
         	return;
@@ -131,8 +131,8 @@ public class ColumnLayout extends ViewGroup {
         // Re-use width/height variables to be child width/height.
         int cWidth = width / cols;
         int cHeight = height / rows;
-        Log.w(EventMainActivity.LOG_NAME,"Child Width: " + Long.toString(cWidth) 
-        							 + ", Child Height: " + Long.toString(cHeight));
+        //Log.w(EventMainActivity.LOG_NAME,"Child Width: " + Long.toString(cWidth) 
+        //							 + ", Child Height: " + Long.toString(cHeight));
  
         int col = 0, row = 0;
         int visibleIndex = 0;
@@ -151,8 +151,8 @@ public class ColumnLayout extends ViewGroup {
             int cTop = cHeight * row;            
             int cBottom = cTop + cHeight;
             int cRight = cLeft + cWidth;
-            Log.w(EventMainActivity.LOG_NAME,"Child:" + Integer.toString(visibleIndex) +  "(" + Long.toString(cLeft) + "," + Long.toString(cTop)
-            		+ "," + Long.toString(cRight) + "," + Long.toString(cBottom) + ")");
+            //Log.w(EventMainActivity.LOG_NAME,"Child:" + Integer.toString(visibleIndex) +  "(" + Long.toString(cLeft) + "," + Long.toString(cTop)
+            //		+ "," + Long.toString(cRight) + "," + Long.toString(cBottom) + ")");
             
             child.layout(cLeft, cTop, cRight, cBottom);
             ++visibleIndex;

@@ -16,6 +16,7 @@ public class SettingsActivity extends Activity  {
 	
 	public static final String KEY_ITEMS_TO_DISPLAY = "items_to_display";  
 	public static final String KEY_CALS_TO_DISPLAY = "caldisplay";
+	public static final String KEY_MAX_DAYS = "maxdays";
 	private SettingsFragment k = new SettingsFragment();
 	
     @Override
@@ -96,7 +97,7 @@ public class SettingsActivity extends Activity  {
                 Preference connectionPref = findPreference(key);
                 // Set summary to be the user-description for the selected value
                 connectionPref.setSummary(getString(R.string.items_to_display_summary) + "(" + sharedPreferences.getString(key, "") + ")");
-                Log.w(EventMainActivity.LOG_NAME, "Setting Dialog Preference");
+                //Log.w(EventMainActivity.LOG_NAME, "Setting Dialog Preference");
             }
         }
    	    

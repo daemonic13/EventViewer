@@ -35,7 +35,7 @@ public class CalendarManager {
 		// Determine our count
 		int cLen = calsCursor.getCount();		
 		if (cLen == 0) { return 0; }
-		Log.w(EventMainActivity.LOG_NAME,Long.toString(cLen));
+		//Log.w(EventMainActivity.LOG_NAME,Long.toString(cLen));
 		
 		// Move to first item
 		calsCursor.moveToFirst();
@@ -46,8 +46,7 @@ public class CalendarManager {
 		for (int i = 0; i < cLen; i++) {
 			
 			// Cursor Manipulation
-			if (calsCursor.isLast()) { break; }
-			calsCursor.moveToNext();
+			if (calsCursor.isAfterLast()) { break; }
 			
 			// Get the name and id as strings
 			String id = Long.toString(calsCursor.getLong(0));
@@ -58,12 +57,14 @@ public class CalendarManager {
 			if (id == null) {
 				id = "0";
 			}
-			Log.w(EventMainActivity.LOG_NAME,name);
-			Log.w(EventMainActivity.LOG_NAME,id);
+			//Log.w(EventMainActivity.LOG_NAME,name);
+			//Log.w(EventMainActivity.LOG_NAME,id);
 			
 			// Assign to our array
 			sCalendarIDs.add(id);
 			sCalendarNames.add(name);
+			
+			calsCursor.moveToNext();
 		}
 		
 		// Clean up the cursor

@@ -34,19 +34,19 @@ public class EventMainActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		
 		String model = Build.MODEL;
-		Log.d(LOG_NAME, "model=" + model);
+		//Log.d(LOG_NAME, "model=" + model);
 		String product = Build.PRODUCT;
-	    Log.d(LOG_NAME, "product=" + product);
+	    //Log.d(LOG_NAME, "product=" + product);
 	    if (product != null) {
 	    	bIsEmulator = product.equals("sdk") || product.contains("_sdk") || product.contains("sdk_");
 	    }
-	    Log.d(LOG_NAME, "isEmulator=" + bIsEmulator);
+	    //Log.d(LOG_NAME, "isEmulator=" + bIsEmulator);
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.event_main);
 
 		// Create our calendar manager
-		mCal = new EventReader(this);
+		mCal = new EventReader(this,120);
 
 		// Update our preferences
 		updatePreferences();
@@ -61,7 +61,7 @@ public class EventMainActivity extends Activity {
 		// Specify Date
 		Calendar cDate = Calendar.getInstance();
 		int j = (i / 10) + 1;
-		Log.w(LOG_NAME,"Day to Add? "+Integer.toString(j));
+		//Log.w(LOG_NAME,"Day to Add? "+Integer.toString(j));
 		
 		// Modify Date
 		cDate.add(Calendar.DAY_OF_MONTH,j);		
@@ -74,7 +74,7 @@ public class EventMainActivity extends Activity {
 		// build some code to return return random data
 		EventInstance oEvent = new EventInstance();
 		oEvent.set("Testing " + Integer.toString(i),t.getTime() , t2.getTime(), 0, false);
-		Log.w(LOG_NAME,"Random Data Loop #"+Integer.toString(i));
+		//Log.w(LOG_NAME,"Random Data Loop #"+Integer.toString(i));
 		
 		return oEvent;
 	}
@@ -178,11 +178,11 @@ public class EventMainActivity extends Activity {
 		if (currentView != null) {
 			insertPoint.addView(currentView);
 		}
-		
-		Log.w(LOG_NAME,"Finished Adding Items...");
 
 		// Clear our memory
-		mCal.UnhookCursor();
+		if (!bIsEmulator) {
+			mCal.UnhookCursor();
+		}
 	}
 
 	@Override
@@ -229,7 +229,11 @@ public class EventMainActivity extends Activity {
 		try {
 			String t = sharedPref.getString(
 					SettingsActivity.KEY_ITEMS_TO_DISPLAY, "40");
-			mintMaxItems = (int) Long.parseLong(t.trim());
+			mintMaxItems = Integer.parseInt(t.trim());
+			
+			t = sharedPref.getString(SettingsActivity.KEY_MAX_DAYS, "50");
+			int iDays = Integer.parseInt(t.trim());
+			mCal.setMaxDays(iDays);
 
 			Set<String> sValues = sharedPref.getStringSet(
 					SettingsActivity.KEY_CALS_TO_DISPLAY, null);

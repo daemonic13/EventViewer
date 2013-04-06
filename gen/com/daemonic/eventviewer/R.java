@@ -77,7 +77,9 @@ containing a value of this type.
         public static final int app_name=0x7f050000;
         public static final int cal_display=0x7f05000a;
         public static final int cal_display_summary=0x7f05000b;
-        public static final int dateHeaderTemp=0x7f05000e;
+        public static final int dateHeaderTemp=0x7f050010;
+        public static final int date_limit=0x7f05000d;
+        public static final int date_limit_summary=0x7f05000e;
         public static final int filter=0x7f050005;
         public static final int hello_world=0x7f050001;
         public static final int items_to_display=0x7f050008;
@@ -85,8 +87,8 @@ containing a value of this type.
         public static final int items_to_display_summary=0x7f050009;
         public static final int menu_settings=0x7f050002;
         public static final int refresh=0x7f050004;
-        public static final int settings_title=0x7f05000d;
-        public static final int temp=0x7f05000f;
+        public static final int settings_title=0x7f05000f;
+        public static final int temp=0x7f050011;
         public static final int teststring=0x7f050006;
         public static final int title_activity_event_main=0x7f050003;
         /**   Settings  
